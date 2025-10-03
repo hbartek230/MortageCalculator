@@ -4,18 +4,11 @@
       <h1 class="text-3xl font-bold text-gray-800 mb-6">Kalkulator Kredytu Hipotecznego</h1>
       
       <CreditData
-        :loanAmount="loanAmount"
-        :loanPeriod="loanPeriodMonths"
-        :years="loanYears"
-        :margin="margin"
-        :wibor="wibor"
-        :rateType="rateType"
-        @update:loanAmount="val => loanAmount = val"
-        @update:loanPeriod="val => loanPeriodMonths = val"
-        @update:years="val => { loanYears = val; loanPeriodMonths = val * 12 }"
-        @update:margin="val => margin = val"
-        @update:wibor="val => wibor = val"
-        @update:rateType="val => rateType = val"
+        v-model:loanAmount="loanAmount"
+        v-model:years="loanYears"
+        v-model:margin="margin"
+        v-model:wibor="wibor"
+        v-model:rateType="rateType"
         @export="exportToCSV"
       >
         <template #export-icon>
@@ -126,7 +119,7 @@ import { useLoanCalculator } from './composables/useLoanCalculator';
 
 const loanAmount = ref(300000);
 const loanYears = ref(25); // default 25 years
-const loanPeriodMonths = ref(loanYears.value * 12);
+const loanPeriodMonths = computed(() => loanYears.value * 12);
 const margin = ref(2.5);
 const wibor = ref(5.85);
 const rateType = ref('malejace');
@@ -158,9 +151,15 @@ const formatCurrency = (value) => {
 };
 
 const getMonthsLabel = (months) => {
-  if (months === 1) return 'miesiąc';
-  if (months < 5) return 'miesiące';
-  return 'miesięcy';
+  const rules = new Intl.PluralRules('pl-PL');
+  switch (rules.select(months)) {
+    case 'one':
+      return 'miesiąc';
+    case 'few':
+      return 'miesiące';
+    default:
+      return 'miesięcy';
+  }
 };
 
 const exportToCSV = () => {
@@ -175,8 +174,12 @@ const exportToCSV = () => {
   
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob);
+  link.href = url;
   link.download = 'harmonogram_kredytu.csv';
+  document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };
 </script>

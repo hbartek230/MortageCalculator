@@ -82,7 +82,6 @@
 <script setup>
 defineProps({
   loanAmount: Number,
-  loanPeriod: Number,
   years: Number,
   margin: Number,
   wibor: Number,
@@ -91,8 +90,5 @@ defineProps({
 
 const yearOptions = [5,10,15,20,25,30,35];
 
-// expose to template
-defineExpose({ yearOptions });
-
-defineEmits(["update:loanAmount", "update:loanPeriod", "update:margin", "update:wibor", "update:rateType", "export"]);
+defineEmits(["update:loanAmount", "update:years", "update:margin", "update:wibor", "update:rateType", "export"]);
 </script>

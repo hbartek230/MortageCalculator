@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-    <div class="overflow-x-auto" style="max-height: 600px; overflow-y: auto">
+  <div class="overflow-x-auto table-scroll">
       <table class="w-full text-sm">
         <thead class="bg-gray-800 text-white sticky top-0">
           <tr>
@@ -15,10 +15,9 @@
         </thead>
         <tbody>
           <AmortizationRow
-            v-for="(row, index) in schedule"
-            :key="index"
+            v-for="row in schedule"
+            :key="row.lp"
             :row="row"
-            :index="index"
             :overpaymentEnabled="overpaymentEnabled"
             :formatCurrency="formatCurrency"
           />

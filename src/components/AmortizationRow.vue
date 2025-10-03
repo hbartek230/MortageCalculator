@@ -1,5 +1,5 @@
 <template>
-  <tr :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'">
+  <tr :class="row.lp % 2 === 0 ? 'bg-gray-50' : 'bg-white'">
     <td class="px-4 py-2 border-b">{{ row.lp }}</td>
     <td class="px-4 py-2 border-b">{{ row.month }}</td>
     <td class="px-4 py-2 border-b text-right font-semibold">{{ formatCurrency(row.monthlyPayment) }}</td>
@@ -15,7 +15,6 @@ import { defineProps } from 'vue';
 
 defineProps({
   row: Object,
-  index: Number,
   overpaymentEnabled: Boolean,
   formatCurrency: Function
 });
